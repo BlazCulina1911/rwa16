@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReservationsController;
 use App\Models\User;
+use App\Models\Reservation;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Route;
 
@@ -16,15 +17,39 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('', function() {
-    $users = User::findOrFail(1)->get();
-
-    foreach($users as $user) {
-        echo $user->name . "<br>";
-    }
-
+Route::get('/u/{id}', function($id) {
+   $reservations = Reservation::where('user_id', $id);
+   return dd($reservations);
 });
 
+//Route::get('', function () {
+//   return User::destroy(3);
+//});
+//
+//Route::get('', function ()
+//{
+//   $user = User::find(2);
+//
+//   $user->delete();
+//});
+//
+//Route::get('/', function () {
+//    return User::where('id', 1)->where('email', 'zuvi91@splitsplitsplitsplit.hr')->update(['name' => 'Jurgento']);
+//});
+//Route::get('/', function () {
+//    $user = User::find(2);
+//
+//    $user->name = "Blaž";
+//    $user->save();
+//});
+//Route::get('/find', function() {
+////    $users = User::findOrFail(1)->get();
+////
+////    foreach($users as $user) {
+////        echo $user->name . "<br>";
+////    }
+//});
+//
 //Route::get('/', function () {
 //    $posts = User::where('id', '>', 0)
 //        ->orderBy('id', 'asc')->take(2)->get();
@@ -70,24 +95,25 @@ Route::get('', function() {
 //
 ////Route::resource('/reservations', ReservationsController::class);
 //
-//Route::get('/rođoBlaž',
-//    function () {
-//
-////          Ovo funkcionira! :D
-////        DB::insert("insert into reservations(data, result, expired) values(?, ?, ?)",
-////            ['Hello from routes! :D', '1', '0']);
-//
-//        //Genijalno! Više nikad ne pravi račun manualno rođo!
-//        try {
-//            DB::insert("insert into users(name, email, phone, password) values(?,?,?,?)",
-//                ['Blaž Čulina', 'blaz.culina1911@gmail.com', '+385976767404', bcrypt('testtest')]);
-//            return dd("A wild pokemon (Blaž) appears in the database! :D" . PHP_EOL . PHP_EOL . PHP_EOL . "Fora mi je baš dobra, Martina pusti me na miru. :(");
-//
-//        } catch (QueryException $exception)
-//        {
-//            dd("Meščini rođo da si već upisan, al provjeri ti to! :D"  . PHP_EOL . PHP_EOL . PHP_EOL . "Martina fora mi je i dalje dobra! :(((");
-//        }
-//    });
+
+Route::get('/rođoBlaž',
+    function () {
+
+//          Ovo funkcionira! :D
+//        DB::insert("insert into reservations(data, result, expired) values(?, ?, ?)",
+//            ['Hello from routes! :D', '1', '0']);
+
+        //Genijalno! Više nikad ne pravi račun manualno rođo!
+        try {
+            DB::insert("insert into users(name, email, phone, password) values(?,?,?,?)",
+                ['Blaž Čulina', 'blaz.culina1911@gmail.com', '+385976767404', bcrypt('testtest')]);
+            return dd("A wild pokemon (Blaž) appears in the database! :D" . PHP_EOL . PHP_EOL . PHP_EOL . "Fora mi je baš dobra, Martina pusti me na miru. :(");
+
+        } catch (QueryException $exception)
+        {
+            dd("Meščini rođo da si već upisan, al provjeri ti to! :D"  . PHP_EOL . PHP_EOL . PHP_EOL . "Martina fora mi je i dalje dobra! :(((");
+        }
+    });
 //
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
