@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//URL::forceRootUrl('http://studenti.sum.ba/projekti/rwa/2022/gX');
+
 Route::get('', function ()
 {
     return view('homepage');
