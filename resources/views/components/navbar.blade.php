@@ -5,16 +5,16 @@
         <a href="{{ url('/contact') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Kontakt</a>
         <a href="{{ url('/about') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">O nama</a>
         @auth
-            <a href="{{ url('/profile') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Moj Profil</a>
-            <a href="{{ url('/reservations') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Rezervacija</a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button class="w3-bar-item w3-button w3-padding-large" type="submit">Odjavi se</button>
+                <button class="w3-bar-item w3-button w3-padding-large w3-right" type="submit">Odjavi se</button>
             </form>
+            <a href="{{ url('/reservations') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Rezervacija</a>
+            <a href="{{ url('/profile') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Moj Profil</a>
         @endauth
         @guest
-            <a href="{{ url('login') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Prijava</a>
-            <a href="{{ url('register') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white">Registracija</a>
+            <a href="{{ url('register') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Registracija</a>
+            <a href="{{ url('login') }}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white w3-right">Prijava</a>
         @endguest
     </div>
 
