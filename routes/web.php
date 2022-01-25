@@ -17,10 +17,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/u/{id}', function($id) {
-   $reservations = Reservation::where('user_id', $id);
-   return dd($reservations);
+Route::get('', function ()
+{
+    return view('homepage');
 });
+Route::get('about', function () {
+   return view('about');
+});
+Route::get('profile', function () {
+    return view('profile');
+});
+Route::get('contact', function () {
+    return view('contact');
+});
+
+Route::get('reservations', function () {
+    return view('comingsoon');
+});
+
+Route::get('/p/{id}/u', function ($id) {
+   return Reservation::find($id)->user->name;
+});
+
+
+//Route::get('/u/{id}', function($id) {
+//    $user = User::findOrFail($id);
+//
+//    foreach($user->reservations as $reservation)
+//    {
+//        echo "ID testa: " . $reservation->id . "<br>";
+//        echo "Testiran na datum: " . $reservation->created_at . "<br>";
+//
+//        if ($reservation->result == 1) echo "Rezultat: POZITIVAN!<br>";
+//        else if (!$reservation->result == 0) echo "Rezultat: NEGATIVAN!<br>";
+//        else echo "Rezultat na čekanju!<br>";
+//
+//        echo "<br><hr>";
+//    }
+//    return "<br>USPJEH!";
+//});
 
 //Route::get('', function () {
 //   return User::destroy(3);
@@ -115,8 +150,8 @@ Route::get('/rođoBlaž',
         }
     });
 //
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth'])->name('dashboard');
-//
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
 require __DIR__.'/auth.php';

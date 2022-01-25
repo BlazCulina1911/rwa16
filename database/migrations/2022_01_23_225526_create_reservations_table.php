@@ -17,6 +17,7 @@ class CreateReservationsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->boolean('result')->nullable();
+            $table->string('qr')->nullable();
             $table->timestamps();
         });
     }
