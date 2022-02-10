@@ -42,15 +42,20 @@ use Laravel\Sanctum\HasApiTokens;
  * @mixin \Eloquent
  * @property int $isAdmin
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
+ * @property-read \App\Models\Reservation|null $reservation
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reservation[] $reservations
+ * @property-read int|null $reservations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role[] $roles
+ * @property-read int|null $roles_count
  */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    public function reservation()
-    {
-            return $this->hasOne(Reservation::class);
-    }
+//    public function reservation()
+//    {
+//            return $this->hasOne(Reservation::class);
+//    }
     public function reservations()
     {
         return $this->hasMany(Reservation::class);

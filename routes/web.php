@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ReservationsController;
-use App\Models\User;
 use App\Models\Reservation;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,14 +36,111 @@ Route::get('contact', function () {
 });
 
 Route::get('reservations', function () {
-    return view('comingsoon');
+    if (auth()->check() && auth()->user()->isAdmin == 1)
+    {
+        return view('reservations.reservation');
+    }
+
+    else return \Illuminate\Support\Facades\Redirect::back();
 });
 
-Route::get('/p/{id}/u', function ($id) {
-   return Reservation::find($id)->user->name;
+Route::get('reservations/create/{date}', function($date) {
+
+    $allowedDates = Reservation::displayDates();
+
+    $flag = 0;
+    foreach($allowedDates as $check)
+    {
+        if ($check->toDateString() == $date)
+        {
+            $flag = 1;
+        }
+    }
+    if ($flag) {
+
+        $parsed = \Carbon\Carbon::parse($date, 'Europe/Zagreb');
+
+        return view('reservations.pickedDate')->with(compact('parsed'));
+
+    }   else return abort(404, 'nice try :)');
 });
 
+Route::get('reservations/create/{date}/{time}', function($date, $time) {
 
+    $allowedDates = Reservation::displayDates();
+    $allowedTimes = Reservation::availableAt(\Carbon\Carbon::parse($date, 'Europe/Zagreb'));
+    $datesPassed = 0;
+    $timesPassed = 0;
+    $flag = 0;
+    foreach($allowedDates as $check)
+    {
+        if ($check->toDateString() == $date)
+        {
+            $datesPassed = 1;
+        }
+    }
+
+    foreach ($allowedTimes as $check) {
+        if ($check->format('H:i') == $time)
+        {
+            $timesPassed = 1;
+        }
+    }
+    if ($datesPassed == 1 && $timesPassed == 1) $flag =1;
+    if ($flag) {
+
+        $parsed = \Carbon\Carbon::parse($date . $time, 'Europe/Zagreb');
+
+        return view('reservations.pickedTime')->with(compact('parsed'));
+
+    }   else return abort(404, 'nice try :)');
+});
+
+Route::resource('reservations', ReservationsController::class);
+Route::get('reservations/show', function () {
+    return view();
+});
+
+Route::get('test', function () {
+
+
+  if (auth()->check() && auth()->user()->isAdmin == 1)
+    {
+        return view('dashboard');
+    }
+  else return Redirect::back()->withErrors(['msg' => 'Nemate pristup dashboardu!']);
+})->name('dashboard');;
+
+//Zajebnacija :D
+
+Route::get('/rođoBlaž',
+    function () {
+
+//          Ovo funkcionira! :D
+//        DB::insert("insert into reservations(data, result, expired) values(?, ?, ?)",
+//            ['Hello from routes! :D', '1', '0']);
+
+        //Genijalno! Više nikad ne pravi račun manualno rođo!
+        try {
+            DB::insert("insert into users(name, email, phone, password, isAdmin) values(?,?,?,?, ?)",
+                ['Blaž Čulina', 'blaz.culina1911@gmail.com', '+385976767404', bcrypt('testtest'), 1]);
+            return dd("A wild pokemon (Blaž) appears in the database! :D" . PHP_EOL . PHP_EOL . PHP_EOL . "Fora mi je baš dobra, Martina pusti me na miru. :(");
+
+        } catch (QueryException $exception)
+        {
+            dd("Meščini rođo da si već upisan, al provjeri ti to! :D"  . PHP_EOL . PHP_EOL . PHP_EOL . "Martina fora mi je i dalje dobra! :(((");
+        }
+    });
+//Route::get('/dashboard', function () {
+//    if(Auth::user->isAdmin) {
+//        return view('dashboard');
+//    }
+//    else return back();
+//})->middleware(['auth'])->name('dashboard');
+
+//Route::get('/p/{id}/u', function ($id) {
+//   return Reservation::find($id)->user->name;
+//});
 //Route::get('/u/{id}', function($id) {
 //    $user = User::findOrFail($id);
 //
@@ -133,27 +232,5 @@ Route::get('/p/{id}/u', function ($id) {
 ////Route::resource('/reservations', ReservationsController::class);
 //
 
-Route::get('/rođoBlaž',
-    function () {
-
-//          Ovo funkcionira! :D
-//        DB::insert("insert into reservations(data, result, expired) values(?, ?, ?)",
-//            ['Hello from routes! :D', '1', '0']);
-
-        //Genijalno! Više nikad ne pravi račun manualno rođo!
-        try {
-            DB::insert("insert into users(name, email, phone, password) values(?,?,?,?)",
-                ['Blaž Čulina', 'blaz.culina1911@gmail.com', '+385976767404', bcrypt('testtest')]);
-            return dd("A wild pokemon (Blaž) appears in the database! :D" . PHP_EOL . PHP_EOL . PHP_EOL . "Fora mi je baš dobra, Martina pusti me na miru. :(");
-
-        } catch (QueryException $exception)
-        {
-            dd("Meščini rođo da si već upisan, al provjeri ti to! :D"  . PHP_EOL . PHP_EOL . PHP_EOL . "Martina fora mi je i dalje dobra! :(((");
-        }
-    });
-//
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

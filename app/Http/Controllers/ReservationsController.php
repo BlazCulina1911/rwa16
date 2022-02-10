@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reservation;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationsController extends Controller
 {
@@ -16,7 +20,7 @@ class ReservationsController extends Controller
 
     public function index()
     {
-        //
+        return view('reservations.index');
     }
 
     /**
@@ -26,7 +30,7 @@ class ReservationsController extends Controller
      */
     public function create()
     {
-        //
+        return view('reservations.reservation');
     }
 
     /**
@@ -37,7 +41,18 @@ class ReservationsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+           'reserved_at' => ['required', 'unique:reservations']
+        ]);
+        $qr = substr(md5(mt_rand()), 0, 8);
+            Reservation::create([
+                'user_id' => Auth::user()->id,
+                'qr' => $qr,
+                'reserved_at' => Carbon::parse($request->date . " " . $request->time)
+            ]);
+
+        return redirect()->to('/reservations/'. $qr);
     }
 
     /**
@@ -46,9 +61,11 @@ class ReservationsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($qr)
     {
-        //
+        $reservation = Reservation::whereQr($qr)->first() ?? abort(404, "Ovaj COVID test ne postoji!");
+        $user = User::findOrFail($reservation->user_id); //TODO popravi relaciju! :(
+        return view('reservations.show')->with(compact('reservation', 'user'));
     }
 
     /**
