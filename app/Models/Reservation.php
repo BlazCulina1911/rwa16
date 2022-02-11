@@ -69,7 +69,7 @@ class Reservation extends Model
 //        }
 //    }
 
-    function displayDates() {
+    public static function displayDates() {
 
         $dateCollection = array();
 
@@ -94,7 +94,7 @@ class Reservation extends Model
         return $dateCollection;
     }
 
-    function availableAt(Carbon $date)
+    public static function availableAt(Carbon $date)
     {
 
         $openingTime = Carbon::createFromTime(8, 0, 0, 'Europe/Zagreb');
@@ -131,6 +131,7 @@ class Reservation extends Model
                 $openingTime->addMinutes(15);
             }
         }
+
 
         return $collection;
 

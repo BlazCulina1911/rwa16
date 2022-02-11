@@ -80,9 +80,14 @@
             <input name="state" class="col-sm-3" readonly="true" value="{{$user->country}}"></input>
         </div>
     </form>
+    <div style="display: flex; margin-top: 50px; justify-content: center; align-items: center;">
+    {!! QrCode::size(300)->generate(Request::url()); !!}
+    </div>
 </div>
 
-
+<div style="container w3-left w3-jumbo w3-margin">
+    <p></p>
+</div>
 <!-- Footer -->
 <footer class="w3-bar w3-red w3-card w3-left-align w3-large">
     <h1> <br> <br></h1>
