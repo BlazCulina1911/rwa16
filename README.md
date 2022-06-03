@@ -6,6 +6,9 @@
 <br><h3>BACKEND:</h3><h2>Blaž Čulina</h2>
 
 </div>
+
+Ovaj projekt nije dovršen, te ima dosta stvari koje se mogu ispraviti.
+
 <br>
 
 <h2>Tehnologije korištene:</h2>
